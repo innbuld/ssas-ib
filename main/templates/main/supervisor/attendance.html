@@ -1,0 +1,141 @@
+{% extends 'main/supervisor/layout.html' %}
+{% block body %}
+<!-- component -->
+<!-- component -->
+
+
+<div class="m-20">
+
+    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:px-6">
+          <h3 class="text-lg font-medium leading-6 text-gray-900">Student Information</h3>
+        </div>
+        <div class="border-t border-gray-200">
+          <dl>
+            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Student name</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{student.first_name}} {{student.last_name}}</dd>
+            </div>
+            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Matric Number</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{student.reg_num}}</dd>
+            </div>
+            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Phone Number</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{student.phone}}</dd>
+            </div>
+            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Level</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{student.level}}</dd>
+            </div>
+            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">College</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{student.college}}</dd>
+            </div>
+            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Department</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{student.department}}</dd>
+            </div>
+            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Organization</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{student.organization}}</dd>
+            </div>
+          </dl>
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    <table class="border-collapse w-full">
+        <thead>
+            <tr>
+                <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Date and Time</th>
+                <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Attendance Location Map URL</th>
+                <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Report</th>
+                <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for atte in attendance %}
+            <tr class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
+                <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
+                    <span class="lg:hidden absolute top-0 left-0 bg-green-200 px-2 py-1 text-xs font-bold uppercase">Name</span>
+                    {{atte.date}} 
+                </td>
+                <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                    <span class="lg:hidden absolute top-0 left-0 bg-green-200 px-2 py-1 text-xs font-bold uppercase">Reg Num</span>
+                    <a href="{{atte.location}}" target="_blank">{{atte.location}} </a>
+                    <br>
+                    <br>
+                    <a href="{{atte.url}}" target="_blank">{{atte.url}} </a>
+                </td>
+                <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                    <span class="lg:hidden absolute top-0 left-0 bg-green-200 px-2 py-1 text-xs font-bold uppercase">Report</span>
+                    {% if atte.report %}
+                      <!-- Modal Trigger Button -->
+                      <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" id="openModalButton">
+                          View Report
+                      </button>
+                      <!-- Modal -->
+                      <div class="fixed inset-0 flex items-center justify-center z-50 hidden" id="modal">
+                        <div class="bg-white rounded-lg shadow-lg p-6 w-1/2">
+                            <h2 class="text-xl font-bold mb-4">Report</h2>
+                            <p class="text-gray-700">{{ atte.report }}</p>
+                            <div class="mt-6">
+                                <!-- Close Modal Button -->
+                                <button class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded" id="closeModalButton">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                </td>
+                <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                    <span class="lg:hidden absolute top-0 left-0 bg-green-200 px-2 py-1 text-xs font-bold uppercase">Status</span>
+
+                    {% if atte.is_confirm %}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="green" class="w-6 h-6 ml-12">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <a href="{% url 'atte_conf' atte.pk student.pk %}?decline=true" class="inline-block rounded-md border border-transparent bg-red-600 py-3 px-8 text-center font-medium text-white hover:bg-red-700">Decline Location</a>
+                    {% else %}
+                    <a href="{% url 'atte_conf' atte.pk student.pk %}" class="inline-block rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-center font-medium text-white hover:bg-indigo-700">Confirm Location</a>
+                    <!-- <a href="{% url 'atte_conf' atte.pk student.pk %}?decline=true" class="inline-block rounded-md border border-transparent bg-red-600 py-3 px-8 text-center font-medium text-white hover:bg-indigo-700">Decline Location</a> -->
+                    {% endif %}
+                    
+                    
+                </td>
+                <!-- <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                    <span class="lg:hidden absolute top-0 left-0 bg-green-200 px-2 py-1 text-xs font-bold uppercase">Organization</span>
+                    {{student.organization}}
+                </td>
+                <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                    <span class="lg:hidden absolute top-0 left-0 bg-green-200 px-2 py-1 text-xs font-bold uppercase">Actions</span>
+                    <a href="{% url 'connect' student.pk %}" class="text-green-400 hover:text-green-600 underline">Add Student</a>
+                </td> -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+      // Get the modal and buttons
+      const modal = document.getElementById('modal');
+      const openModalButton = document.getElementById('openModalButton');
+      const closeModalButton = document.getElementById('closeModalButton');
+
+      // Show the modal when the open button is clicked
+      openModalButton.addEventListener('click', () => {
+          modal.classList.remove('hidden');
+      });
+
+      // Hide the modal when the close button is clicked
+      closeModalButton.addEventListener('click', () => {
+          modal.classList.add('hidden');
+      });
+  </script>
+</div>
+{% endblock %}

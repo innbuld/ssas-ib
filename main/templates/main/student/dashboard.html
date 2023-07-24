@@ -1,0 +1,175 @@
+{% extends 'main/student/layout.html' %}
+{% load static %}
+
+
+{% block body %}
+
+<div class="sm:px-6 w-full">
+  <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+      <div class="px-4 py-5 sm:px-6">
+        <h3 class="text-lg font-medium leading-6 text-gray-900">Student Information</h3>
+      </div>
+      <div class="border-t border-gray-200">
+        <dl>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Student name</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{data.first_name}} {{data.last_name}}</dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Matric Number</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{data.reg_num}}</dd>
+          </div>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Phone Number</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{data.phone}}</dd>
+          </div>
+          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Level</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{data.level}}</dd>
+          </div>
+          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Organization</dt>
+            <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{{data.organization}}</dd>
+          </div>
+          <!-- <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Current Coordinates</dt>
+            <dd id="lat" class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"></a></dd>
+          </div> -->
+          <!-- <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-gray-500">Current Location Link</dt>
+            <dd id="url" class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"></dd>
+          </div> -->
+
+
+
+
+          <div class="py-6 sm:py-8 lg:py-12">
+              <form action="{% url 'studentattendance' %}" method="post" class="max-w-screen-md grid gap-4 mx-auto sm:grid-cols-2 xl:max-w-[1200px]">
+                {% csrf_token %}
+                <input name="lon" id="lon" type="hidden">
+                <input name="lat" id="lat" type="hidden">
+                <input name="url" id="url" type="hidden">
+                <input name="gUrl" id="gUrl" type="hidden">
+              {% if first_attendance %}
+              <div class="sm:col-span-2">
+                <p class="inline-block text-gray-800 text-sm sm:text-base mb-2">
+                  Report*
+                </p>
+                <textarea name="report" class="w-full h-64 bg-gray-50 text-gray-800 border focus:ring ring-indigo-300 rounded outline-none transition duration-100 px-3 py-2" required></textarea>
+              </div>
+              {% endif %}
+
+              <div class="flex justify-between items-center sm:col-span-2 xl:justify-around">
+                <div class="mt-8 space-y-6">
+                  <div id ="find-me" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Show my location</div><br/>
+                  <p id = "status"></p>
+                  <a id = "map-link" target="_blank"></a>
+                </div>
+
+              <button type="submit" class="inline-flex w-full justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">{% if first_attendance %} Take Attendace and Report  {% else %} Take Attendace {% endif %} </button>
+
+              </div>
+            </form>
+          </div>
+
+
+
+
+        </dl>
+      </div>
+    </div>
+    
+  </div>
+
+  <br>
+  <br>
+
+  <!-- <table class="border-collapse w-full">
+    <thead>
+        <tr>
+            <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Date and Time</th>
+            <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Attendance Location Map URL</th>
+            <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for atte in aa %}
+        <tr class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
+            <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
+                <span class="lg:hidden absolute top-0 left-0 bg-green-200 px-2 py-1 text-xs font-bold uppercase">Name</span>
+                {{atte.date}} 
+            </td>
+            <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                <span class="lg:hidden absolute top-0 left-0 bg-green-200 px-2 py-1 text-xs font-bold uppercase">Reg Num</span>
+                {{atte.location}}
+            </td>
+            <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                <span class="lg:hidden absolute top-0 left-0 bg-green-200 px-2 py-1 text-xs font-bold uppercase">Status</span>
+                Present
+            </td>
+           
+        </tr>
+        {% endfor %}
+    </tbody>
+</table> -->
+
+
+  </div>
+    
+  <script>function geoFindMe() {
+
+    const status = document.querySelector('#status');
+    const mapLink = document.querySelector('#map-link');
+  
+    mapLink.href = '';
+    mapLink.textContent = '';
+
+    const options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0,
+};
+  
+    function success(position) {
+      const latitude  = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      document.querySelector('#lon').value = longitude;
+      document.querySelector('#lat').value = latitude;
+      document.querySelector('#url').value = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
+      document.querySelector('#gUrl').value = `http://maps.google.com/maps?q=${latitude},${longitude}`;
+
+  
+      status.textContent = '';
+      mapLink.href = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
+      mapLink.textContent = `Latitude: ${latitude} °, Longitude: ${longitude} °`;
+    }
+  
+    function error() {
+      status.textContent = 'Unable to retrieve your location';
+      document.querySelector('#lon').value = 'Unable to retrieve your location';
+      document.querySelector('#lat').value = 'Unable to retrieve your location';
+      document.querySelector('#url').value = 'Unable to retrieve your location';
+    }
+  
+    if (!navigator.geolocation) {
+      status.textContent = 'Geolocation is not supported by your browser';
+      document.querySelector('#lon').value = 'Geolocation is not supported by your browser';
+      document.querySelector('#lat').value = 'Geolocation is not supported by your browser';
+      document.querySelector('#url').value = 'Geolocation is not supported by your browser';
+    } else {
+      status.textContent = 'Locating…';
+      navigator.geolocation.getCurrentPosition(success, error, options);
+    }
+  
+}
+  
+document.querySelector('#find-me').addEventListener('click', geoFindMe);
+
+
+  </script>
+  
+  <!-- <script src="{% static '/index.js' %}"></script> -->
+
+{% endblock %}
